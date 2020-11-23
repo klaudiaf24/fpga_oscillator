@@ -3,7 +3,7 @@
 module top #(parameter nd = 20) (input clk, rst, start, rx, 
     output tx);
 
-wire rstn = ~rstp;
+wire rstn = ~rst;
 wire [31:0] s_axi_wdata, s_axi_rdata;
 wire [3:0] s_axi_awaddr, s_axi_araddr;
 wire [1:0] s_axi_bresp; //, s_axi_rresp;
@@ -32,19 +32,19 @@ axi_uartlite_0 uart_ip (.s_axi_aclk(clk),        // input wire s_axi_aclk
   .tx(tx)                        // output wire tx
 );
   
-wire [$clog2(nd)-1:0] addr;
-wire [7:0] received, transmit;
-master_axi_uart #(.nd(nd)) master (.clk(clk), .rst(rstp), .start(start), .rec_trn(led),
-    .awadr(s_axi_awaddr), .awvalid(s_axi_awvalid), .awrdy(s_axi_awready),
-    .wdata(s_axi_wdata), .wvalid(s_axi_wvalid), .wrdy(s_axi_wready),
-    .bdata(s_axi_bresp), .bvalid(s_axi_bvalid), .brdy(s_axi_bready),    //not needed
-    .aradr(s_axi_araddr), .arvalid(s_axi_arvalid), .arrdy(s_axi_arready),
-    .rdata(s_axi_rdata), .rvalid(s_axi_rvalid), .rrdy(s_axi_rready),
-    .received(received), .dcnt(addr), .wstb(wr),
-    .transmit(transmit), .rstb(rd));
+//wire [$clog2(nd)-1:0] addr;
+//wire [7:0] received, transmit;
+//master_axi_uart #(.nd(nd)) master (.clk(clk), .rst(rstp), .start(start), .rec_trn(led),
+//    .awadr(s_axi_awaddr), .awvalid(s_axi_awvalid), .awrdy(s_axi_awready),
+//    .wdata(s_axi_wdata), .wvalid(s_axi_wvalid), .wrdy(s_axi_wready),
+//    .bdata(s_axi_bresp), .bvalid(s_axi_bvalid), .brdy(s_axi_bready),    //not needed
+//    .aradr(s_axi_araddr), .arvalid(s_axi_arvalid), .arrdy(s_axi_arready),
+//    .rdata(s_axi_rdata), .rvalid(s_axi_rvalid), .rrdy(s_axi_rready),
+//    .received(received), .dcnt(addr), .wstb(wr),
+//    .transmit(transmit), .rstb(rd));
 
-memory #(.deep(nd)) data_storage (.clk(clk), .wr(wr), .rd(rd), .adr(addr), .datin(received), .datout(transmit));
+//memory #(.deep(nd)) data_storage (.clk(clk), .wr(wr), .rd(rd), .adr(addr), .datin(received), .datout(transmit));
 
-assign leds = {led, {(7-$clog2(nd)){1'b0}}, addr};
+//assign leds = {led, {(7-$clog2(nd)){1'b0}}, addr};
 
 endmodule
