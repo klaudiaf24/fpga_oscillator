@@ -20,35 +20,88 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module dac_generator#(parameter width = 16, depth = 8)
-(input clk, rst, wave_select, input [7:0] amplitude, input [15:0] frequency);
+    (input clk, rst, wave_select, start, stop, input unsigned [7:0] amplitude, input [15:0] frequency,
+     output sync, d0, sclk // dac output 
+);
 
 reg [$clog2(width)-1:0] wave_iter;
 reg [15:0] frequency_iter;
 
-wire [depth-1:0] data_out;
 
+wire [depth-1:0] mem_data_in;
+// amplitude = max => spidac_data_out = mem_data_in
+// amplitude = 0 => spidac_data_out = 0 signed
+reg [depth-1:0] spidac_data_out;
+reg en;
+
+typedef enum {Idle, LoadFromMem, PrepareDataOut, SendToDac, WaitSent, Sent, WaitPlay, Played} states_en; // WaitPlay plays 1 sample
+states_en st, nst;
+
+// counts to frequency and increments wave iter
 always @(posedge clk, posedge rst)
     if (rst)
         frequency_iter <= 0;
-    else if (frequency_iter == frequency)
+    else if (st == WaitSent)
         frequency_iter <= 0;
-    else
+    else if (st == WaitPlay)
         frequency_iter <= frequency_iter + 1;
 
-
-
+// this one goes through the wave in memory (16 samples repeated)
 always @(posedge clk, posedge rst)
     if (rst)
         wave_iter <= 0;
-    else if (frequency_iter == frequency) begin
-        if (wave_iter == width)
-            wave_iter <= 0;
-        else
+    else if (st == Idle)
+        wave_iter <= 0;
+    else if (st == Played) begin
+        if (wave_iter < width)
             wave_iter <= wave_iter + 1;
+        else
+            wave_iter <= 0;
     end
 
-wave_samples_memory #(width, depth) mem_inst(clk, wave_select, wave_iter, data_out);
+typedef reg signed [15:0] int16_t;
+typedef reg unsigned [15:0] uint16_t; 
 
-spidac #(depth) spidac_inst(clk, rst, en, data_out_tansposed);
+always @(posedge clk, posedge rst)
+    if (rst)
+        spidac_data_out <= 0;
+    else if (st == LoadFromMem)
+        spidac_data_out <= 0;
+    else if (st == PrepareDataOut)
+        spidac_data_out <= int16_t'(mem_data_in) * int16_t'(amplitude) / int16_t'{8{1'b1}};
+        
+always @(posedge clk, posedge rst)
+    if (rst)
+        en <= 0;
+    else if (st == Idle)
+        en <= 0;
+    else if (st == SendToDac)
+        en <= 1;
+    else if (st == Sent)
+        en <= 0;
 
-endmodule;
+always @* begin
+    nst = Idle;
+    case (st)
+    Idle: nst = start ? LoadFromMem : Idle;
+    LoadFromMem: nst = PrepareDataOut;
+    PrepareDataOut: nst = SendToDac;
+    SendToDac: nst = WaitSent;
+    WaitSent: nst = fin ? Sent : WaitSent;
+    Sent: nst = WaitPlay;
+    WaitPlay: nst = frequency_iter == frequency ? Played : WaitPlay;
+    Played: nst = stop ? Idle : LoadFromMem;
+    endcase
+end
+
+always @(posedge clk, posedge rst)
+    if (rst)
+        st <= Idle;
+    else
+        st <= nst;
+
+wave_samples_memory #(width, depth) mem_inst(clk, wave_select, wave_iter, mem_data_in);
+
+spidac #(depth) spidac_inst(clk, rst, en, spidac_data_out, cs, mosi, fin, slck);
+
+endmodule
