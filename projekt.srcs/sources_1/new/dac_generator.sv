@@ -61,6 +61,7 @@ always @(posedge clk, posedge rst)
 
 typedef reg signed [15:0] int16_t;
 typedef reg unsigned [15:0] uint16_t; 
+typedef reg signed [8:0] int8_t;
 
 always @(posedge clk, posedge rst)
     if (rst)
@@ -68,7 +69,7 @@ always @(posedge clk, posedge rst)
     else if (st == LoadFromMem)
         spidac_data_out <= 0;
     else if (st == PrepareDataOut)
-        spidac_data_out <= int16_t'(mem_data_in) * int16_t'(amplitude) / int16_t'{8{1'b1}};
+        spidac_data_out <= int8_t'(int16_t'(mem_data_in) * int16_t'(amplitude) / int16_t'{8{1'b1}});
         
 always @(posedge clk, posedge rst)
     if (rst)
@@ -102,6 +103,6 @@ always @(posedge clk, posedge rst)
 
 wave_samples_memory #(width, depth) mem_inst(clk, wave_select, wave_iter, mem_data_in);
 
-spidac #(depth) spidac_inst(clk, rst, en, spidac_data_out, cs, mosi, fin, slck);
+spidac #(depth) spidac_inst(clk, rst, en, spidac_data_out, sync, d0, fin, sclk);
 
 endmodule

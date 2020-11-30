@@ -1,9 +1,12 @@
 `timescale 1ns / 1ps
 
-module top #(parameter nd = 20) (input clk, rst, start, rx, 
-    output tx);
+module top #(parameter nd = 20) (input clk, rst, /* start ,*/ rx, 
+    output tx,
+    output d0, sync, sclk);
 
 wire rstn = ~rst;
+
+/*
 wire [31:0] s_axi_wdata, s_axi_rdata;
 wire [3:0] s_axi_awaddr, s_axi_araddr;
 wire [1:0] s_axi_bresp; //, s_axi_rresp;
@@ -31,6 +34,7 @@ axi_uartlite_0 uart_ip (.s_axi_aclk(clk),        // input wire s_axi_aclk
   .rx(rx),                        // input wire rx
   .tx(tx)                        // output wire tx
 );
+*/
   
 //wire [$clog2(nd)-1:0] addr;
 //wire [7:0] received, transmit;
@@ -46,5 +50,14 @@ axi_uartlite_0 uart_ip (.s_axi_aclk(clk),        // input wire s_axi_aclk
 //memory #(.deep(nd)) data_storage (.clk(clk), .wr(wr), .rd(rd), .adr(addr), .datin(received), .datout(transmit));
 
 //assign leds = {led, {(7-$clog2(nd)){1'b0}}, addr};
+
+wire [7:0] amplitude;
+wire [15:0] frequency;
+
+mockup_driver driver_inst(clk, rst, wave_select, start, stop, amplitude, frequency);
+dac_generator #(16, 8) dac_generator_inst
+    (clk, rst, wave_select, start, stop, amplitude, frequency,
+     sync, d0, sclk // dac output 
+);
 
 endmodule

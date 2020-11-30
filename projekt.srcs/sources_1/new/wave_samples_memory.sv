@@ -21,7 +21,7 @@
 
 
 module wave_samples_memory#(parameter width = 16, depth = 8)
-    (input clk, wave_select, input [$clog2(width)-1:0] addr, output reg [depth-1:0] data_out);
+    (input clk, wave_select, input [$clog2(width)-1:0] addr, output reg signed [depth-1:0] data_out);
 
 (*ram_style = "block"*) reg [depth-1:0] sin_wave [width];
 (*ram_style = "block"*) reg [depth-1:0] triangle_wave [width];

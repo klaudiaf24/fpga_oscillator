@@ -19,6 +19,6 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module uart_decoder(input clk, output reg wave_select, output reg [7:0] amplitude, output reg [15:0] frequency);
+module uart_decoder(input clk, rst, output reg wave_select, output reg [7:0] amplitude, output reg [15:0] frequency);
 
 endmodule
