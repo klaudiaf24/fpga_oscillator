@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdint.h>
+#include <stdlib.h>
+
+#include <unistd.h>
 
 double triangle(double val) {
 	if (val < M_PI / 2)
@@ -12,16 +15,34 @@ double triangle(double val) {
 	return 0;
 }
 
-int main(void) {
-	FILE* sin_file = fopen("init_val_sin.mem", "w");
-	FILE* triangle_file = fopen("init_val_triangle.mem", "w");
+void usage(const char *program_name) {
+	fprintf(stderr, "Usage: %s [-s samples_no]\n", program_name);
+}
 
-	for (int iter = 0; iter < 16; ++iter) {
-		int8_t sin_val = INT8_MAX * sin(iter * 2. * M_PI / 16);
-		int8_t triangle_val = INT8_MAX * triangle(iter * 2. * M_PI / 16);
+int main(int argc, char *argv[]) {
+	FILE *sin_file = fopen("init_val_sin.mem", "w");
+	FILE *triangle_file = fopen("init_val_triangle.mem", "w");
 
-		fprintf(sin_file, "%x ", sin_val);
-		fprintf(triangle_file, "%x ", triangle_val);
+	int ch;
+	int samples_no = 16;
+
+	while ((ch = getopt(argc, argv, "s:")) != -1) {
+		switch (ch) {
+		case 's':
+			sscanf(optarg, "%d", &samples_no);
+			break;
+		default:
+			usage(argv[0]);
+			samples_no = 0;
+		}
+	}
+
+	for (int iter = 0; iter < samples_no; ++iter) {
+		int8_t sin_val = INT8_MAX * sin(iter * 2. * M_PI / samples_no);
+		int8_t triangle_val = INT8_MAX * triangle(iter * 2. * M_PI / samples_no);
+
+		fprintf(sin_file, "%x ", (uint8_t)sin_val);
+		fprintf(triangle_file, "%x ", (uint8_t)triangle_val);
 	}
 
 	fclose(sin_file);
