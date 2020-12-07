@@ -26,7 +26,7 @@ module spidac #(parameter nb=8)
 typedef enum { idle, send, hold1, done } states;
 states st, nst;
 localparam bdcnt= $clog2(nb);
-reg [2:0] cnt;
+reg [4:0] cnt;
 reg [nb-1:0] shreg;
 reg t;
 reg [bdcnt:0] dcnt;
@@ -59,7 +59,7 @@ always @(posedge clk, posedge rst)
         cnt <= 2'b0;
     else if (st == send)
         cnt = cnt + 1;
-assign slck = cnt[1];
+assign slck = cnt[3];
 
  
 

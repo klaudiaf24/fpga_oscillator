@@ -2,12 +2,12 @@
 # Webtalk v2020.1 (64-bit)
 # SW Build 2902540 on Wed May 27 19:54:35 MDT 2020
 # IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
-# Start of session at: Mon Nov 30 10:35:56 2020
-# Process ID: 15254
+# Start of session at: Mon Dec  7 09:04:56 2020
+# Process ID: 11970
 # Current directory: /tmp/projekty/fpga_oscillator/projekt.sim/sim_1/behav/xsim
 # Command line: wbtcv -mode batch -source /tmp/projekty/fpga_oscillator/projekt.sim/sim_1/behav/xsim/xsim.dir/tb_behav/webtalk/xsim_webtalk.tcl -notrace
 # Log file: /tmp/projekty/fpga_oscillator/projekt.sim/sim_1/behav/xsim/webtalk.log
 # Journal file: /tmp/projekty/fpga_oscillator/projekt.sim/sim_1/behav/xsim/webtalk.jou
 #-----------------------------------------------------------
 source /tmp/projekty/fpga_oscillator/projekt.sim/sim_1/behav/xsim/xsim.dir/tb_behav/webtalk/xsim_webtalk.tcl -notrace
-INFO: [Common 17-206] Exiting Webtalk at Mon Nov 30 10:35:56 2020...
+INFO: [Common 17-206] Exiting Webtalk at Mon Dec  7 09:04:56 2020...

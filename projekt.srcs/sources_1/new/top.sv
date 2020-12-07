@@ -1,7 +1,10 @@
 `timescale 1ns / 1ps
 
-module top #(parameter nd = 20) (input clk, rst, /* start ,*/ rx, 
+module top #(parameter nd = 20) (input clk, rst, /* start ,*/
+/*
+    input rx, 
     output tx,
+*/
     output d0, sync, sclk);
 
 wire rstn = ~rst;

@@ -23,7 +23,7 @@
 module mockup_driver(input clk, rst, output reg wave_select, start, stop, output reg [7:0] amplitude, output reg [15:0] frequency);
 
 // localparam freq = 100000000 * 1;
-localparam freq = 10000;
+localparam freq = 1000000;
 reg [61:0] cnt;
 
 assign wave_select = 1;

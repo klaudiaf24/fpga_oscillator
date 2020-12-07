@@ -36,6 +36,6 @@ initial begin
     #100 rst = 0;
 end
 
-top top_inst(clk, rst, rx, tx, d0, sync, sclk);
+top top_inst(clk, rst, /*rx, tx,*/ d0, sync, sclk);
 
 endmodule

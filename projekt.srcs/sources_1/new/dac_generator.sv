@@ -34,6 +34,8 @@ wire [depth-1:0] mem_data_in;
 reg [depth-1:0] spidac_data_out;
 reg en;
 
+localparam ctr_word = 8'b0;
+
 typedef enum {Idle, LoadFromMem, PrepareDataOut, SendToDac, WaitSent, Sent, WaitPlay, Played} states_en; // WaitPlay plays 1 sample
 states_en st, nst;
 
@@ -53,7 +55,7 @@ always @(posedge clk, posedge rst)
     else if (st == Idle)
         wave_iter <= 0;
     else if (st == Played) begin
-        if (wave_iter < width)
+        if (wave_iter < width - 1)
             wave_iter <= wave_iter + 1;
         else
             wave_iter <= 0;
@@ -69,7 +71,7 @@ always @(posedge clk, posedge rst)
     else if (st == LoadFromMem)
         spidac_data_out <= 0;
     else if (st == PrepareDataOut)
-        spidac_data_out <= int8_t'(int16_t'(mem_data_in) * int16_t'(amplitude) / int16_t'{8{1'b1}});
+        spidac_data_out <= mem_data_in + 8'b10000000; // int8_t'(int16_t'(mem_data_in) * int16_t'(amplitude) / int16_t'{8{1'b1}});
         
 always @(posedge clk, posedge rst)
     if (rst)
@@ -103,6 +105,6 @@ always @(posedge clk, posedge rst)
 
 wave_samples_memory #(width, depth) mem_inst(clk, wave_select, wave_iter, mem_data_in);
 
-spidac #(depth) spidac_inst(clk, rst, en, spidac_data_out, sync, d0, fin, sclk);
+spidac #(depth + 8) spidac_inst(clk, rst, en, {ctr_word,spidac_data_out}, sync, d0, fin, sclk);
 
 endmodule
