@@ -1,10 +1,12 @@
 `timescale 1ns / 1ps
 
+`define MOCKUP_DRIVER
+
 module top #(parameter nd = 20) (input clk, rst, /* start ,*/
-/*
+
     input rx, 
     output tx,
-*/
+
     output d0, sync, sclk);
 
 wire rstn = ~rst;
@@ -56,8 +58,11 @@ axi_uartlite_0 uart_ip (.s_axi_aclk(clk),        // input wire s_axi_aclk
 
 wire [7:0] amplitude;
 wire [15:0] frequency;
-
+`ifdef MOCKUP_DRIVER
 mockup_driver driver_inst(clk, rst, wave_select, start, stop, amplitude, frequency);
+`else
+uart_decoder decoder_inst(clk, rst, tx, rx, wave_select, start, stop, amplitude, frequency);
+`endif
 dac_generator #(16, 8) dac_generator_inst
     (clk, rst, wave_select, start, stop, amplitude, frequency,
      sync, d0, sclk // dac output 
