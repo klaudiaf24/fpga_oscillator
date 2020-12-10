@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-`define MOCKUP_DRIVER
+//`define MOCKUP_DRIVER
 
 module top #(parameter nd = 20) (input clk, rst, /* start ,*/
 
