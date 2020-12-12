@@ -56,7 +56,7 @@ axi_uartlite_0 uart_ip (.s_axi_aclk(clk),        // input wire s_axi_aclk
 
 reg [7:0] read_data;
 
-master_axi_r master_r (.clk(clk), .rst(rst),
+master_axi_r master_r (.clk(clk), .rst(rstn),
     .wadr(s_axi_awaddr), .wadr_valid(s_axi_awvalid), .wadr_rdy(s_axi_awready),
     .wdata(s_axi_wdata), .wdata_valid(s_axi_wvalid), .wdata_rdy(s_axi_wready),
     .bresp(s_axi_bresp), .bvalid(s_axi_bvalid), .brdy(s_axi_bready),    //not needed
@@ -87,7 +87,7 @@ end
 
 always @(posedge clk, posedge rst)
     if (rst)
-        st <= WaitAmplitude;
+        st <= WaitWave;
     else
         st <= nst;
         
@@ -111,7 +111,7 @@ always @(posedge clk, posedge rst) begin
             start <= 0;
             stop <= 1;
         end else begin
-            start <= 0;
+            start <= 1;
             stop <= 0;
         end
     end   

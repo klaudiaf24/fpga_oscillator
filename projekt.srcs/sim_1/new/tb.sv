@@ -30,12 +30,73 @@ initial begin
     forever #5 clk = ~clk;
 end
 
+/*
 initial begin
     rst = 0;
     #100 rst = 1;
     #100 rst = 0;
 end
+*/
+reg [7:0] val;
+reg str;
 
-top top_inst(clk, rst, /*rx, tx,*/ d0, sync, sclk);
+task play(input byte wave_select, input byte amplitude, input shortint frequency);
+    str <= 0;
+    
+    val <= 8'h15;//wave_select;
+    str <= 1;
+    wait(fin);
+    #20 str <= 0;
+    
+    #20 val <= amplitude;
+    str <= 1;
+    wait(fin);
+    #20 str <= 0;
+
+    #20 val <= frequency[7:0];
+    str <= 1;
+    wait(fin);
+    #20 str <= 0;
+
+    #20 val <= frequency[15:8];
+    str <= 1;
+    wait(fin);
+    #20 str <= 0;
+endtask
+
+task stop();
+    play(0, 0, 0);
+endtask
+
+reg [3:0] cnt;
+
+initial begin
+    cnt = 15;
+    rst = 0;
+    #5 rst = 1;
+    #100 rst = 0;
+    play(1, 255, 10000);
+    #100_000
+    stop();
+    #1000
+    play(1, 255, 10000);
+    
+end
+
+
+top top_inst(clk, rst, rx, tx, d0, sync, sclk);
+simple_transmitter #(.baudrate(9600)) trst(clk, ~rst, str, val, rx, fin);
+
+    
+reg [7:0] tmp_values;
+reg [7:0] values;
+always @(negedge sclk) begin
+    if (cnt < 8)
+        tmp_values[cnt] = d0;
+    cnt = cnt - 1;    
+end
+
+always @(posedge sync)
+    values = tmp_values;
 
 endmodule

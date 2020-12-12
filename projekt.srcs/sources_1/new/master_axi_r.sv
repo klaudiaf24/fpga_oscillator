@@ -19,7 +19,7 @@ stateEnum st, nst;
 wire rx_fifo_vdat = ((st == WaitStatus) & rdata_valid)?rdata[0]:1'b0;  
         
 //state register
-always @(posedge clk)   //, negedge rst)
+always @(posedge clk, negedge rst)
     if(~rst)
         st <= ReadStatus;
     else
