@@ -43,25 +43,25 @@ reg str;
 task play(input byte wave_select, input byte amplitude, input shortint frequency);
     str <= 0;
     
-    val <= 8'h15;//wave_select;
+    val <= wave_select;
     str <= 1;
     wait(fin);
-    #20 str <= 0;
+    str <= 0;
     
     #20 val <= amplitude;
     str <= 1;
     wait(fin);
-    #20 str <= 0;
+    str <= 0;
 
     #20 val <= frequency[7:0];
     str <= 1;
     wait(fin);
-    #20 str <= 0;
+    str <= 0;
 
     #20 val <= frequency[15:8];
     str <= 1;
     wait(fin);
-    #20 str <= 0;
+    str <= 0;
 endtask
 
 task stop();
@@ -75,11 +75,12 @@ initial begin
     rst = 0;
     #5 rst = 1;
     #100 rst = 0;
-    play(1, 255, 10000);
-    #100_000
+    #100
+    play(0, 100, 1000);
+    #10_000_000
     stop();
-    #1000
-    play(1, 255, 10000);
+    #10_000_000
+    play(0, 255, 1000);
     
 end
 

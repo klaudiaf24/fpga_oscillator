@@ -2,7 +2,7 @@
 
 //`define MOCKUP_DRIVER
 
-module top #(parameter nd = 20) (input clk, rst, /* start ,*/
+module top (input clk, rst, /* start ,*/
 
     input rx, 
     output tx,
@@ -63,7 +63,7 @@ mockup_driver driver_inst(clk, rst, wave_select, start, stop, amplitude, frequen
 `else
 uart_decoder decoder_inst(clk, rst, tx, rx, wave_select, start, stop, amplitude, frequency);
 `endif
-dac_generator #(16, 8) dac_generator_inst
+dac_generator #(256, 8) dac_generator_inst
     (clk, rst, wave_select, start, stop, amplitude, frequency,
      sync, d0, sclk // dac output 
 );

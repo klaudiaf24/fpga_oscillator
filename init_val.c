@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
 			int8_t triangle_val = INT8_MAX * triangle(iter * 2. * M_PI / samples_no);
 
 			sin_val = nominator * sin_val / denominator;
-			triangle_val = nominator * sin_val / denominator;
+			triangle_val = nominator * triangle_val / denominator;
 
 			fprintf(sin_file, "%2x ", (uint8_t)sin_val);
 			fprintf(triangle_file, "%2x ", (uint8_t)triangle_val);

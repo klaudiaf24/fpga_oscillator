@@ -34,6 +34,8 @@ wire [depth-1:0] mem_data_in;
 reg [depth-1:0] spidac_data_out;
 reg en;
 
+wire [2:0] amp_select = amplitude[7:4];
+
 localparam ctr_word = 8'b0;
 
 typedef enum {Idle, LoadFromMem, PrepareDataOut, SendToDac, WaitSent, Sent, WaitPlay, Played} states_en; // WaitPlay plays 1 sample
@@ -103,7 +105,7 @@ always @(posedge clk, posedge rst)
     else
         st <= nst;
 
-wave_samples_memory #(width, depth) mem_inst(clk, wave_select, wave_iter, mem_data_in);
+wave_samples_memory #(width, depth) mem_inst(clk, wave_select, wave_iter, amp_select, mem_data_in);
 
 spidac #(depth + 8) spidac_inst(clk, rst, en, {ctr_word,spidac_data_out}, sync, d0, fin, sclk);
 
