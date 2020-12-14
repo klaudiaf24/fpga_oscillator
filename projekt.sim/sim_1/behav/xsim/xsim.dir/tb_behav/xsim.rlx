@@ -1,11 +1,11 @@
 
 { 
-    crc :  2422343220802796222  , 
+    crc :  10342987906926699708  , 
     ccp_crc :  0  , 
-    cmdline : " -wto f73ba7ab3be9493096ba4a0adec840f3 --incr --debug typical --relax --mt 2 -L axi_lite_ipif_v3_0_4 -L lib_pkg_v1_0_2 -L lib_srl_fifo_v1_0_2 -L lib_cdc_v1_0_2 -L axi_uartlite_v2_0_25 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_behav xil_defaultlib.tb xil_defaultlib.glbl" , 
+    cmdline : " -wto f73ba7ab3be9493096ba4a0adec840f3 --incr --debug typical --relax --mt 8 -L axi_lite_ipif_v3_0_4 -L lib_pkg_v1_0_2 -L lib_srl_fifo_v1_0_2 -L lib_cdc_v1_0_2 -L axi_uartlite_v2_0_25 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_behav xil_defaultlib.tb xil_defaultlib.glbl" , 
     buildDate : "May 27 2020" , 
-    buildTime : "20:09:33" , 
-    linkCmd : "C:\\Xilinx\\Vivado\\2020.1\\data\\..\\tps\\mingw\\6.2.0\\win64.o\\nt\\bin\\gcc.exe -Wa,-W  -O -Wl,--stack,104857600 -o \"xsim.dir/tb_behav/xsimk.exe\"   \"xsim.dir/tb_behav/obj/xsim_0.win64.obj\" \"xsim.dir/tb_behav/obj/xsim_1.win64.obj\" -L\"C:\\Xilinx\\Vivado\\2020.1\\lib\\win64.o\" -lrdi_simulator_kernel   -lrdi_simbridge_kernel" , 
+    buildTime : "19:59:15" , 
+    linkCmd : "/usr/bin/gcc -Wa,-W  -O -fPIC  -m64  -Wl,--no-as-needed  -Wl,--unresolved-symbols=ignore-all  -o \"xsim.dir/tb_behav/xsimk\"   \"xsim.dir/tb_behav/obj/xsim_0.lnx64.o\" \"xsim.dir/tb_behav/obj/xsim_1.lnx64.o\" -L\"/local/home/cadmgr/2020.1/lib/lnx64.o\" -lrdi_simulator_kernel   -lrdi_simbridge_kernel" , 
     aggregate_nets : 
     [ 
     ] 
