@@ -139,6 +139,7 @@
       <File Path="$PSRCDIR/constrs_1/new/timing.xdc">
         <FileInfo>
           <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/constrs_1/new/io.xdc">
